@@ -1,9 +1,10 @@
 import { Employee } from "../models/employeeModel.js";
 
-//
+//CreateEmployee
 export const createEmployee = async (req, res) => {
   try {
     const { name, age, email, department, salary } = req.body;
+    console.log("here hitted", req.body)
     if (!name || !age || !department || !salary || !email) {
       return res.status(400).json({
         status: false,
@@ -33,7 +34,7 @@ export const createEmployee = async (req, res) => {
   }
 };
 
-//
+//bulkUploadEmployee
 export const bulkUploadEmployees = async (req, res) => {
   try {
     const employees = req.body;
@@ -59,14 +60,23 @@ export const bulkUploadEmployees = async (req, res) => {
   }
 };
 
-//Read, serach, sort, orderBy
+//Read, serach, sort, orderBy, pagination
 export const getAllEmployee = async (req, res) => {
   try {
-    const { search, sortBy, order } = req.query;
-    //search , sortBy , order  ?sortBy
+    let { search, sortBy, order, page, limit } = req.query;
 
-    let query = {}; //variable for object and empty this
+    // Default values
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 5;
 
+    // Safety checks
+    if (page < 1) page = 1;
+    if (limit < 1) limit = 5;
+    if (limit > 50) limit = 50;
+
+    let query = {};
+
+    // SEARCH
     if (search) {
       query = {
         $or: [
@@ -75,29 +85,43 @@ export const getAllEmployee = async (req, res) => {
         ],
       };
     }
-   
-    //sort
-    let sortOption = {};
 
+    // SORT
+    let sortOption = {};
     if (sortBy) {
       sortOption[sortBy] = order === "desc" ? -1 : 1;
     }
 
-    const employees = await Employee.find(query).sort(sortOption);
+    // PAGINATION
+    const skip = (page - 1) * limit;
+
+    const employees = await Employee.find(query)
+      .sort(sortOption)
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Employee.countDocuments(query);
 
     return res.json({
       status: true,
       message: "employee get",
       data: employees,
+      pagination: {
+        total,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+        perPage: limit,
+      },
     });
   } catch (error) {
+    console.log(error);
     return res.json({
       status: false,
       message: `Error in getAll Employees ${error.message}`,
     });
   }
 };
-//update
+//updateEmployeeAll
 export const updateEmployee = async (req, res) => {
   try {
     const { id } = req.params;
@@ -133,6 +157,7 @@ export const updateEmployee = async (req, res) => {
   }
 };
 
+//updateEmployeePartially
 export const updateEmployeePartially = async (req, res) => {
   try {
     const { id } = req.params;
@@ -174,7 +199,7 @@ export const deleteEmployee = async (req, res) => {
         })
     }
     const deleteEmployee = await Employee.findByIdAndDelete(id);
-    return res.json({
+    return res.status(204).json({
         status:true,
         message:"Employee Deleted",
         data:deleteEmployee
@@ -188,11 +213,3 @@ export const deleteEmployee = async (req, res) => {
   }
 };
 
-// export const
-/**
-$or:[
-                    {name: {$regex: search , $options:"i"}},
-                    {department:{$regex: search, $options:"i"}}
-    ] 
-                    
- */
