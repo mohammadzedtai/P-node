@@ -13,6 +13,7 @@ export const EmployeeList = () => {
     page: 1,
     limit: 5,
   });
+  
   const fetchEmployee = async () => {
     try {
       const res = await getEmployee(params);
@@ -61,6 +62,13 @@ export const EmployeeList = () => {
             <p>{emp.salary}</p>
         </div>
       ))}
+
+      {/*Pagination */}
+      <div>
+        <button disabled={params.page === 1} onClick={()=>{setParams({...params, page: params.page - 1})}}>Prev</button>
+        <span>Page {params.page}/{totalPages}</span>
+        <button disabled={params.page === totalPages} onClick={()=> setParams({...params, page: params.page + 1})}>Next</button>
+      </div>
     </div>
   );
 };

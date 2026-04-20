@@ -1,5 +1,5 @@
 
-const BASE_URL = "http://localhost:8080/api/employees"
+const BASE_URL = "https://node10ambatch-3.onrender.com/api/employees"
 
 export const getEmployee = async (params = {}) =>{
     const query = new URLSearchParams(params).toString();
