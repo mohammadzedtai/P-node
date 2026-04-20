@@ -14,6 +14,13 @@ await connectDb();
 //Routes
 app.use("/api/employees", employeeRouter)
 
+
+app.get("/health", (req, res)=>{
+    res.json({
+        message:"Api is Running"
+    })    
+})
+
 const PORT = process.env.PORT
 app.listen(PORT, ()=>{
     console.log(`server is running ${PORT}`)

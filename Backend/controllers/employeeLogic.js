@@ -4,7 +4,6 @@ import { Employee } from "../models/employeeModel.js";
 export const createEmployee = async (req, res) => {
   try {
     const { name, age, email, department, salary } = req.body;
-    console.log("here hitted", req.body)
     if (!name || !age || !department || !salary || !email) {
       return res.status(400).json({
         status: false,
@@ -29,8 +28,6 @@ export const createEmployee = async (req, res) => {
       status: false,
       message: `Error in Creating Employee ${error.message}`,
     });
-    console.log(error);
-    console.log(error.message);
   }
 };
 
@@ -38,7 +35,6 @@ export const createEmployee = async (req, res) => {
 export const bulkUploadEmployees = async (req, res) => {
   try {
     const employees = req.body;
-    //const employee = [{}, {}]
     if (!Array.isArray(employees)) {
       return res.status(400).json({
         status: false,
