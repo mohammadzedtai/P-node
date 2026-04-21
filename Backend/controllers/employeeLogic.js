@@ -4,7 +4,7 @@ import { Employee } from "../models/employeeModel.js";
 export const createEmployee = async (req, res) => {
   try {
     const { name, age, email, department, salary } = req.body;
-    if (!name || !age || !department || !salary || !email) {
+    if (!name || !age || !email || !department || !salary ) {
       return res.status(400).json({
         status: false,
         message: "Payload missing",
