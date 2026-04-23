@@ -29,4 +29,5 @@ const studentSchema = new mongoose.Schema({
     }
 })
 
-export const Student = mongoose.Model("Student", studentSchema)
+export const Students = mongoose.model("Student", studentSchema);
+

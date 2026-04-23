@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import { connect } from "mongoose"
-import { studentRouter } from "./routes/studentRoutes.js"
+import studentRouter from "./routes/studentRoutes.js";
 import { connectDB } from "./config/db.js"
 
 

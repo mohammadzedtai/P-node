@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getEmployee } from "../api/api";
+import { getEmployee } from "../api/api.js";
 
-export const EmployeeList = () => {
+export const StudentList = () => {
   const [employee, setEmployee] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -29,7 +29,7 @@ export const EmployeeList = () => {
   }, [params]);
    return (
   <div className="container">
-  <h2>Employee List</h2>
+  <h2>STUDENT LIST</h2>
 
   <div className="controls">
     <input 

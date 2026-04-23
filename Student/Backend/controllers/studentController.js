@@ -1,4 +1,4 @@
-import Student from "../models/studentModel.js";
+import { Students } from "../models/studentModel.js"; // ✅ match ho gaya
 
 export const createStudent = async (req, res) => {
   try {
