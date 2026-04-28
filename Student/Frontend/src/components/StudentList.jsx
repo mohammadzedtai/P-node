@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { getEmployee } from "../api/api.js";
+import { getStudent } from "../api/api.js"; // ✅ change
+
 
 export const StudentList = () => {
-  const [employee, setEmployee] = useState([]);
+  const [students, setStudents] = useState([]); // ✅ change
   const [totalPages, setTotalPages] = useState(1);
 
-  //All Dynamic controls from frontend
   const [params, setParams] = useState({
     search: "",
     sortBy: "",
@@ -13,58 +13,97 @@ export const StudentList = () => {
     page: 1,
     limit: 5,
   });
-  
-  const fetchEmployee = async () => {
-    try {
-      const res = await getEmployee(params);
 
-      setEmployee(res.data);
-      setTotalPages(res.pagination.totalPages);
+  const fetchStudents = async () => {
+    try {
+      const res = await getStudent(params);
+
+      console.log("API 👉", res);
+
+      setStudents(res.data?.data || []); // ✅ change
+      setTotalPages(res.data?.pagination?.totalPages || 1);
+
     } catch (error) {
-      console.log(error);
+      console.log("Error:", error);
     }
   };
+
   useEffect(() => {
-    fetchEmployee();
+    fetchStudents();
   }, [params]);
-   return (
-  <div className="container">
-  <h2>STUDENT LIST</h2>
 
-  <div className="controls">
-    <input 
-        type="text"
-         placeholder="Enter Either name OR department"
-         onChange={(e) => {
-           setParams({ ...params, search: e.target.value, page: 1 });
-        }}/>
+  return (
+    <div className="container">
+      <h2>STUDENT LIST</h2>
 
-    <select onChange={(e)=>{setParams({...params, sortBy: e.target.value})}}>
-      <option value="">Sort</option>
-      <option value="name">Name</option>
-      <option value="salary">Salary</option>
-    </select>
+      {/* 🔍 Controls */}
+      <div className="controls">
+        <input
+          type="text"
+          placeholder="Search name or course"
+          onChange={(e) =>
+            setParams({ ...params, search: e.target.value, page: 1 })
+          }
+        />
 
-    <select onChange={(e)=>{setParams({...params, order:e.target.value})}}>
-      <option value="asc">ASC</option>
-      <option value="desc">DESC</option>
-    </select>
-  </div>
+        <select onChange={(e) =>
+          setParams({ ...params, sortBy: e.target.value })
+        }>
+          <option value="">Sort</option>
+          <option value="name">Name</option>
+          <option value="fees">Fees</option>
+          <option value="age">Age</option>
+        </select>
 
-  {employee.map((emp) => (
-    <div key={emp._id} className="card">
-      <p>{emp.name}</p>
-      <p>{emp.email}</p>
-      <p>{emp.department}</p>
-      <p>{emp.salary}</p>
+        <select onChange={(e) =>
+          setParams({ ...params, order: e.target.value })
+        }>
+          <option value="asc">ASC</option>
+          <option value="desc">DESC</option>
+        </select>
+      </div>
+
+      {/* 📦 Cards */}
+      <div className="card-container">
+        {students.length > 0 ? (
+          students.map((std) => (
+            <div key={std._id} className="card">
+              <p><strong>Name:</strong> {std.name}</p>
+              <p><strong>Email:</strong> {std.email}</p>
+              <p><strong>Course:</strong> {std.course}</p>
+              <p><strong>Age:</strong> {std.age}</p>
+              <p><strong>Fees:</strong> ₹{std.fees}</p>
+            </div>
+          ))
+        ) : (
+          <p className="empty">No students found</p>
+        )}
+      </div>
+
+      {/* 📄 Pagination */}
+      <div className="pagination">
+        <button
+          disabled={params.page === 1}
+          onClick={() =>
+            setParams({ ...params, page: params.page - 1 })
+          }
+        >
+          Prev
+        </button>
+
+        <span>
+          Page {params.page} / {totalPages}
+        </span>
+
+        <button
+          disabled={params.page === totalPages}
+          onClick={() =>
+            setParams({ ...params, page: params.page + 1 })
+          }
+        >
+          Next
+        </button>
+      </div>
     </div>
-  ))}
-
-  <div className="pagination">
-    <button  disabled={params.page === 1} onClick={()=>{setParams({...params, page: params.page - 1})}}>Prev</button>
-    <span>Page {params.page}/{totalPages}</span>
-    <button disabled={params.page === totalPages} onClick={()=> setParams({...params, page: params.page + 1})}>Next</button>
-  </div>
-</div>
   );
 };

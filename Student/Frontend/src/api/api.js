@@ -1,9 +1,18 @@
+const BASE_URL = "https://p-node-4.onrender.com/api/student";
 
-const BASE_URL = "https://p-node-2.onrender.com/api/employees"
-
-export const getEmployee = async (params = {}) =>{
+export const getStudent = async (params = {}) => {
+  try {
     const query = new URLSearchParams(params).toString();
-    console.log("here in api function from getEmployee",query)
-    const res = await fetch(`${BASE_URL}/getEmployee?${query}`)
-    return res.json()
-}
+
+    console.log("API Query 👉", query);
+
+    const res = await fetch(`${BASE_URL}?${query}`); 
+
+    const data = await res.json();
+    return data;
+
+  } catch (error) {
+    console.log("API Error:", error);
+    return { data: [], pagination: { totalPages: 1 } }; // fallback
+  }
+};
