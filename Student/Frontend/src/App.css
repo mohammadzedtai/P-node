@@ -1,127 +1,89 @@
-/* Full Page Background */
-body {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
+}
 
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-    url("https://images.unsplash.com/photo-1492724441997-5dc865305da7");
+/* 🔥 ONLY BACKGROUND IMAGE (NO EXTRA COLOR) */
+body {
+  min-height: 100vh;
 
+  background: url("https://images.unsplash.com/photo-1524995997946-a1c2e315a42f");
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   background-attachment: fixed;
+
+  animation: zoomBg 20s ease-in-out infinite alternate;
 }
 
-/* Main Container */
-.container {
-  padding: 30px;
-  max-width: 900px;
-  margin: auto;
-  color: rgb(207, 190, 190);
+/* Smooth zoom */
+@keyframes zoomBg {
+  0% { background-size: 100%; }
+  100% { background-size: 110%; }
 }
 
-/* Heading */
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 28px;
-  letter-spacing: 1px;
-}
-
-/* Controls */
-.controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.controls input,
-.controls select {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  backdrop-filter: blur(10px);
-  background: rgba(255,255,255,0.2);
-  color: rgb(0, 0, 0);
-}
-
-.controls input::placeholder {
-  color: #000000;
-}
-
-/* Glass Card Effect */
-.card {
-  margin: 12px 0;
-  padding: 15px;
-  border-radius: 12px;
-
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  text-align: center;
+/* 💎 Glass Effect (IMPORTANT) */
+.glass {
+  background: rgba(255, 255, 255, 0.15); /* very transparent */
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
 
+/* ✨ Shadow */
+.shadow-premium {
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+/* 🚀 Hover */
+.hover-lift {
   transition: 0.3s;
 }
-
-.card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+.hover-lift:hover {
+  transform: translateY(-6px) scale(1.02);
 }
 
-.card p {
-
-  font-size: 16px;
-  margin: 6px 0;}
-
-
-.card p:first-child {
-  font-size: 22px;
-  font-weight: bold;
-  color: #00ffd5;
-}
-
-/* Pagination */
-.pagination {
-  margin-top: 25px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  align-items: center;
-}
-
-.pagination button {
-  padding: 8px 15px;
-  border-radius: 8px;
-  border: none;
-  background: linear-gradient(45deg, #00c6ff, #0072ff);
-  color: rgb(27, 27, 27);
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.pagination button:hover {
-  transform: scale(1.1);
-}
-
-.pagination button:disabled {
-  background: gray;
-  cursor: not-allowed;
-}
-
-.pagination span {
-
-  font-size: 18px;
-  font-weight: bold;
-  text-align: center;}
-
-h2 {
-  text-align: center;
-  margin-bottom: 25px;
-  font-size: 34px;
+/* 🎯 Buttons */
+.btn {
+  border-radius: 12px;
+  padding: 12px;
   font-weight: 600;
-  letter-spacing: 1.5px;
-  color: #ffffff;
+  transition: 0.3s;
+  color: white;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+/* 🎬 Card animation */
+.card-animate {
+  animation: fadeUp 0.6s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

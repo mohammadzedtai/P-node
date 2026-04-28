@@ -1,18 +1,27 @@
-const BASE_URL = "https://p-node-4.onrender.com/api/student";
+import axios from "axios";
 
+const BASE_URL = "https://p-node-4.onrender.com/api/students";
+
+// GET
 export const getStudent = async (params = {}) => {
-  try {
-    const query = new URLSearchParams(params).toString();
+  const query = new URLSearchParams(params).toString();
+  const res = await fetch(`${BASE_URL}/getStudent?${query}`);
+  return res.json();
+};
 
-    console.log("API Query 👉", query);
+// CREATE
+export const createStudent = (data) => {
+  return axios.post(`${BASE_URL}/create`, data);
+};
 
-    const res = await fetch(`${BASE_URL}?${query}`); 
+// UPDATE
+export const updateStudent =  (id, data) => {
+  return  axios.patch(`${BASE_URL}/updateStudent/${id}`, data);
+ 
+};
 
-    const data = await res.json();
-    return data;
-
-  } catch (error) {
-    console.log("API Error:", error);
-    return { data: [], pagination: { totalPages: 1 } }; // fallback
-  }
+// DELETE
+export const deleteStudent =  (id) => {
+  return  axios.delete(`${BASE_URL}/deleteStudent/${id}`);
+   
 };
