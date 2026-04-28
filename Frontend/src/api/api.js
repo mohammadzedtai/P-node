@@ -1,5 +1,5 @@
 
-const BASE_URL = "https://p-node-2.onrender.com/api/employees"
+const BASE_URL = "https://p-node-3.onrender.com/api/employees"
 
 export const getEmployee = async (params = {}) =>{
     const query = new URLSearchParams(params).toString();

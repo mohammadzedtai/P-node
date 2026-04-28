@@ -1,23 +1,44 @@
-import { Students } from "../models/studentModel.js"; // ✅ match ho gaya
+import { Students } from "../models/studentModel.js";
 
 export const createStudent = async (req, res) => {
   try {
     const { name, age, email, course, fees } = req.body;
 
     if (!name || !age || !email || !course || !fees) {
-      return res.status(400).json({ status: false, message: "All fields required" });
+      return res.status(400).json({
+        status: false,
+        message: "All fields required"
+      });
     }
 
-    const exist = await Student.findOne({ email });
+    const exist = await Students.findOne({ email });
     if (exist) {
-      return res.status(400).json({ status: false, message: "Email already exists" });
+      return res.status(400).json({
+        status: false,
+        message: "Email already exists"
+      });
     }
 
-    const student = await Student.create(req.body);
+    const student = await Students.create({
+      name,
+      age,
+      email,
+      course,
+      fees
+    });
 
-    res.json({ status: true, message: "Student created", data: student });
+    res.status(201).json({
+      status: true,
+      message: "Student created",
+      data: student
+    });
+
   } catch (error) {
-    res.status(500).json({ status: false, message: error.message });
+    console.log(error); // 🔥 debug
+    res.status(500).json({
+      status: false,
+      message: error.message
+    });
   }
 };
 
@@ -25,51 +46,71 @@ export const createStudent = async (req, res) => {
 export const bulkStudents = async (req, res) => {
   try {
     if (!Array.isArray(req.body)) {
-      return res.status(400).json({ status: false, message: "Send array only" });
+      return res.status(400).json({
+        status: false,
+        message: "Send array only"
+      });
     }
 
     for (let item of req.body) {
       if (!item.name || !item.age || !item.email || !item.course || !item.fees) {
-        return res.status(400).json({ status: false, message: "Missing fields in bulk data" });
+        return res.status(400).json({
+          status: false,
+          message: "Missing fields in bulk data"
+        });
       }
     }
 
-    const data = await Student.insertMany(req.body);
+    const data = await Students.insertMany(req.body);
 
-    res.json({ status: true, message: "Bulk insert success", data });
+    res.json({
+      status: true,
+      message: "Bulk insert success",
+      data
+    });
+
   } catch (error) {
-    res.status(500).json({ status: false, message: error.message });
+    res.status(500).json({
+      status: false,
+      message: error.message
+    });
   }
 };
 
+
 export const getStudents = async (req, res) => {
   try {
-    let { search, sortBy = "createdAt", order = "asc", page = 1, limit = 5, minFees, maxFees } = req.query;
+    let {
+      search,
+      sortBy = "createdAt",
+      order = "asc",
+      page = 1,
+      limit = 5,
+      minFees,
+      maxFees
+    } = req.query;
 
-    let query = {};
+    let query = { status: { $ne: "inactive" } }; // 🔥 soft delete filter
 
-    // 🔍 Search
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
-        { course: { $regex: search, $options: "i" } },
+        { course: { $regex: search, $options: "i" } }
       ];
     }
 
-    // 💰 Fees Filter
     if (minFees || maxFees) {
       query.fees = {};
-      if (minFees) query.fees.$gte = minFees;
-      if (maxFees) query.fees.$lte = maxFees;
+      if (minFees) query.fees.$gte = Number(minFees);
+      if (maxFees) query.fees.$lte = Number(maxFees);
     }
 
-    // 📊 Sorting
     let sort = {};
     sort[sortBy] = order === "asc" ? 1 : -1;
 
-    const total = await Student.countDocuments(query);
+    const total = await Students.countDocuments(query);
 
-    const students = await Student.find(query)
+    const students = await Students.find(query)
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(Number(limit));
@@ -81,25 +122,28 @@ export const getStudents = async (req, res) => {
         total,
         currentPage: Number(page),
         totalPages: Math.ceil(total / limit),
-        perPage: Number(limit),
-      },
+        perPage: Number(limit)
+      }
     });
+
   } catch (error) {
-    res.status(500).json({ status: false, message: error.message });
+    res.status(500).json({
+      status: false,
+      message: error.message
+    });
   }
 };
-
 
 export const updateStudent = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const student = await Student.findById(id);
+    const student = await Students.findById(id);
     if (!student) {
       return res.status(404).json({ status: false, message: "Student not found" });
     }
 
-    const updated = await Student.findByIdAndUpdate(id, req.body, { new: true });
+    const updated = await Students.findByIdAndUpdate(id, req.body, { new: true });
 
     res.json({ status: true, message: "Updated", data: updated });
   } catch (error) {
@@ -119,7 +163,7 @@ export const patchStudent = async (req, res) => {
       return res.status(400).json({ status: false, message: "Invalid fields" });
     }
 
-    const updated = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updated = await Students.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
     res.json({ status: true, message: "Patched", data: updated });
   } catch (error) {
@@ -129,7 +173,7 @@ export const patchStudent = async (req, res) => {
 
 export const deleteStudent = async (req, res) => {
   try {
-    await Student.findByIdAndUpdate(req.params.id, { status: "inactive" });
+    await Students.findByIdAndUpdate(req.params.id, { status: "inactive" });
 
     res.json({ status: true, message: "Student deleted (soft)" });
   } catch (error) {
@@ -141,7 +185,7 @@ export const deleteStudent = async (req, res) => {
 
 export const countByCourse = async (req, res) => {
   try {
-    const data = await Student.aggregate([
+    const data = await Students.aggregate([
       { $group: { _id: "$course", count: { $sum: 1 } } },
     ]);
 
