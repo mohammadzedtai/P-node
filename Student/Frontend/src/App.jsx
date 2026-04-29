@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import './App.css'
 import { StudentForm } from './components/StudentForm.jsx'
-import { StudentList } from './components/StudentList.jsx'
-
 function App() {
   const [refresh, setRefresh] = useState(false);
   const [editStudent, setEditStudent] = useState(null);
@@ -26,14 +24,6 @@ function App() {
               refreshData={refreshData}
               editStudent={editStudent}
               setEditStudent={setEditStudent}
-            />
-          </div>
-
-          <div className="glass shadow-premium p-6">
-            <StudentList
-              refresh={refresh}
-              setEditStudent={setEditStudent}
-              refreshData={refreshData}
             />
           </div>
 
