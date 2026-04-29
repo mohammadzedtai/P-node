@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createStudent, updateStudent } from "../api/api.js";
+import "../App.css";
 
 export const StudentForm = ({ refreshData, editStudent, setEditStudent }) => {
   const [obj, setObj] = useState({
@@ -27,9 +28,10 @@ export const StudentForm = ({ refreshData, editStudent, setEditStudent }) => {
 
     setObj({
       ...obj,
-      [name]: name === "age" || name === "fees"
-        ? value === "" ? "" : Number(value)
-        : value
+      [name]:
+        name === "age" || name === "fees"
+          ? value === "" ? "" : Number(value)
+          : value
     });
   };
 
@@ -40,7 +42,7 @@ export const StudentForm = ({ refreshData, editStudent, setEditStudent }) => {
       updateStudent(editStudent._id, obj)
         .then((res) => {
           alert(res.data.message);
-          setObj({ name: "", email: "", age: "", course: "", fees: "" });
+          resetForm();
           setEditStudent(null);
           refreshData();
         })
@@ -49,144 +51,97 @@ export const StudentForm = ({ refreshData, editStudent, setEditStudent }) => {
       createStudent(obj)
         .then((res) => {
           alert(res.data.message);
-          setObj({ name: "", email: "", age: "", course: "", fees: "" });
+          resetForm();
           refreshData();
         })
         .catch(() => alert("Create failed"));
     }
   };
 
+  const resetForm = () => {
+    setObj({
+      name: "",
+      email: "",
+      age: "",
+      course: "",
+      fees: ""
+    });
+  };
+
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-8 text-left">
+    <div className="center-container">
 
-      {/* 💎 Glass Card */}
-      <div className="bg-white/40 backdrop-blur-xl border border-white/30 rounded-2xl shadow-2xl overflow-hidden text-black">
+      <div className="form-card">
 
-        {/* 🔥 Header */}
-        <div className="px-6 py-5 border-b border-gray-300 text-left">
-          <h2 className="text-2xl md:text-3xl font-bold">
-            {editStudent ? "Update Student Details" : "Add New Student"}
+        {/* Header */}
+        <div className="form-header">
+          <h2>
+            {editStudent ? "Update Student" : "Add New Student"}
           </h2>
-          <p className="text-gray-700 text-sm mt-1">
+          <p>
             {editStudent
-              ? "Edit student info and save changes"
-              : "Fill details to create new record"}
+              ? "Modify and save student details"
+              : "Fill the form to add a new student"}
           </p>
         </div>
 
-        {/* 🧾 Form */}
-        <form onSubmit={handleSubmit} className="p-6 md:p-8 text-left">
+        {/* Form */}
+        <form onSubmit={handleSubmit}>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="form-grid">
 
-            {/* Name */}
-            <div className="text-left">
-              <label className="text-sm text-gray-700 mb-1 block">
-                Full Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={obj.name}
-                onChange={handleChange}
-                placeholder="Enter name"
-                className="w-full bg-white/60 border border-gray-300 rounded-xl px-4 py-3 text-black placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-
-            {/* Email */}
-            <div className="text-left">
-              <label className="text-sm text-gray-700 mb-1 block">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={obj.email}
-                onChange={handleChange}
-                placeholder="Enter email"
-                className="w-full bg-white/60 border border-gray-300 rounded-xl px-4 py-3 text-black placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-
-            {/* Age */}
-            <div className="text-left">
-              <label className="text-sm text-gray-700 mb-1 block">
-                Age
-              </label>
-              <input
-                type="number"
-                name="age"
-                value={obj.age}
-                onChange={handleChange}
-                placeholder="Enter age"
-                className="w-full bg-white/60 border border-gray-300 rounded-xl px-4 py-3 text-black placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-
-            {/* Course */}
-            <div className="text-left">
-              <label className="text-sm text-gray-700 mb-1 block">
-                Course
-              </label>
-              <input
-                type="text"
-                name="course"
-                value={obj.course}
-                onChange={handleChange}
-                placeholder="Enter course"
-                className="w-full bg-white/60 border border-gray-300 rounded-xl px-4 py-3 text-black placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
+            {[
+              { label: "Full Name", name: "name", type: "text" },
+              { label: "Email", name: "email", type: "email" },
+              { label: "Age", name: "age", type: "number" },
+              { label: "Course", name: "course", type: "text" }
+            ].map((field, i) => (
+              <div key={i} className="form-group">
+                <label>{field.label}</label>
+                <input
+                  type={field.type}
+                  name={field.name}
+                  value={obj[field.name]}
+                  onChange={handleChange}
+                  placeholder={`Enter ${field.label}`}
+                />
+              </div>
+            ))}
 
             {/* Fees */}
-            <div className="md:col-span-2 text-left">
-              <label className="text-sm text-gray-700 mb-1 block">
-                Fees
-              </label>
+            <div className="form-group full-width">
+              <label>Fees</label>
               <input
                 type="number"
                 name="fees"
                 value={obj.fees}
                 onChange={handleChange}
-                placeholder="Enter fees"
-                className="w-full bg-white/60 border border-gray-300 rounded-xl px-4 py-3 text-black placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="Enter Fees"
               />
             </div>
+
           </div>
 
-          {/* 🔘 Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-8">
+          {/* Buttons */}
+          <div className="btn-group">
 
-            <button
-              type="submit"
-              className={`flex-1 py-3 rounded-xl font-semibold text-white transition ${
-                editStudent
-                  ? "bg-yellow-500 hover:bg-yellow-600"
-                  : "bg-blue-500 hover:bg-blue-600"
-              }`}
-            >
+            <button type="submit" className="btn primary">
               {editStudent ? "Update Student" : "Add Student"}
             </button>
 
             {editStudent && (
               <button
                 type="button"
+                className="btn cancel"
                 onClick={() => {
                   setEditStudent(null);
-                  setObj({
-                    name: "",
-                    email: "",
-                    age: "",
-                    course: "",
-                    fees: ""
-                  });
+                  resetForm();
                 }}
-                className="flex-1 py-3 rounded-xl font-semibold bg-gray-500 hover:bg-gray-600 text-white transition"
               >
                 Cancel
               </button>
             )}
+
           </div>
 
         </form>

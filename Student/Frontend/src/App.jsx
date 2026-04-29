@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 import { StudentForm } from './components/StudentForm.jsx'
+
+
 function App() {
   const [refresh, setRefresh] = useState(false);
   const [editStudent, setEditStudent] = useState(null);
@@ -8,8 +10,8 @@ function App() {
   const refreshData = () => setRefresh(!refresh);
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="min-h-screen center-container">
+      <div className="max-w-7xl mx-auto px-4 py-8 form-wrapper">
 
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white">
@@ -27,7 +29,7 @@ function App() {
             />
           </div>
 
-        </div>
+        </div> 
       </div>
     </div>
   )

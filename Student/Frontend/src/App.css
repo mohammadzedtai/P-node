@@ -7,9 +7,10 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* 🔥 ONLY BACKGROUND IMAGE (NO EXTRA COLOR) */
+
 body {
   min-height: 100vh;
+  color: white;
 
   background: url("https://images.unsplash.com/photo-1524995997946-a1c2e315a42f");
   background-size: cover;
@@ -20,70 +21,144 @@ body {
   animation: zoomBg 20s ease-in-out infinite alternate;
 }
 
-/* Smooth zoom */
 @keyframes zoomBg {
   0% { background-size: 100%; }
   100% { background-size: 110%; }
 }
 
-/* 💎 Glass Effect (IMPORTANT) */
 .glass {
-  background: rgba(255, 255, 255, 0.15); /* very transparent */
-  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
 }
 
-/* ✨ Shadow */
 .shadow-premium {
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
-/* 🚀 Hover */
-.hover-lift {
-  transition: 0.3s;
-}
-.hover-lift:hover {
-  transform: translateY(-6px) scale(1.02);
+.glass:hover {
+  transform: translateY(-5px);
+  transition: 0.3s ease;
 }
 
-/* 🎯 Buttons */
-.btn {
-  border-radius: 12px;
-  padding: 12px;
-  font-weight: 600;
-  transition: 0.3s;
-  color: white;
+input {
+  transition: all 0.3s ease;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
 }
 
-.btn-warning {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+button {
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.btn-danger {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+button:hover {
+  transform: scale(1.03);
 }
 
-.btn:hover {
-  transform: scale(1.05);
-}
-
-/* 🎬 Card animation */
-.card-animate {
+.fade-in {
   animation: fadeUp 0.6s ease;
 }
 
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(25px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #3b82f6, #9333ea);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+/* Center container */
+.center-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Bigger form wrapper */
+.form-wrapper {
+  width: 100%;
+  max-width: 1100px; /* increased width */
+}
+
+/* Card styling (bigger + premium feel) */
+.form-card {
+  width: 100%;
+  padding: 40px; /* more inner space */
+  border-radius: 20px;
+}
+
+/* Header text bigger */
+.form-card h2 {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.form-card p {
+  font-size: 16px;
+}
+
+/* Input fields bigger */
+.form-card input {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+/* Labels bigger */
+.form-card label {
+  font-size: 15px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Buttons bigger */
+.form-card button {
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+/* Increase gap between fields */
+.form-grid {
+  gap: 20px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .form-wrapper {
+    max-width: 95%;
+  }
+
+  .form-card {
+    padding: 25px;
+  }
+
+  .form-card h2 {
+    font-size: 24px;
   }
 }
