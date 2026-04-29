@@ -14,7 +14,7 @@ dotenv.config()
 
 await connectDB()
 
-app.use("/api/student",studentRouter)
+app.use("/api/students",studentRouter)
 
 const PORT = process.env.PORT
 app.listen(PORT, ()=>{

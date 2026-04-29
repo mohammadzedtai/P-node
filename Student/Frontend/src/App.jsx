@@ -14,7 +14,7 @@ function App() {
       <div className="max-w-7xl mx-auto px-4 py-8">
 
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800">
+          <h1 className="text-4xl font-bold text-white">
             Student Management System
           </h1>
         </div>

@@ -45,7 +45,7 @@ export const StudentList = ({ refresh, setEditStudent, refreshData }) => {
       <div className="max-w-7xl mx-auto">
 
         {/* 🔥 Heading */}
-        <h1 className="text-4xl font-bold text-black mb-10">
+        <h1 className="text-4xl font-bold text-white mb-10">
           Student Data
         </h1>
 
